@@ -12,6 +12,11 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Globe } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = 'https://dwtvxirvtrytdidjatxo.supabase.co'
+const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3dHZ4aXJ2dHJ5dGRpZGphdHhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE3OTExMjAsImV4cCI6MjA1NzM2NzEyMH0.4ZBfJSwEQjdDGHpnlhjZMWLybnqUZyaZlsQC_s8J_bc'
+const supabase = createClient(supabaseUrl, anonKey)
 
 const router = useRouter()
 
