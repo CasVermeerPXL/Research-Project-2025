@@ -10,21 +10,58 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { Globe } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 import { createClient } from '@supabase/supabase-js'
+import { ref, computed } from 'vue'
 
 const supabaseUrl = 'https://dwtvxirvtrytdidjatxo.supabase.co'
-const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3dHZ4aXJ2dHJ5dGRpZGphdHhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE3OTExMjAsImV4cCI6MjA1NzM2NzEyMH0.4ZBfJSwEQjdDGHpnlhjZMWLybnqUZyaZlsQC_s8J_bc'
+const anonKey =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3dHZ4aXJ2dHJ5dGRpZGphdHhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE3OTExMjAsImV4cCI6MjA1NzM2NzEyMH0.4ZBfJSwEQjdDGHpnlhjZMWLybnqUZyaZlsQC_s8J_bc'
 const supabase = createClient(supabaseUrl, anonKey)
 
 const router = useRouter()
+
+const email = ref('')
+const password = ref('')
+const errorMessage = ref('')
 
 const goToSignUp = () => {
   router.push('/register')
 }
 
-const loginWithGoogle = () => {
+const signInUser = async () => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email.value,
+    password: password.value,
+  })
+
+  if (error) {
+    errorMessage.value = 'Invalid email or password.'
+    console.log(error.message)
+  } else {
+    console.log('User is logged in')
+    router.push('/dashboard')
+  }
+}
+
+const loginWithGoogle = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+  })
+
+  if (error) {
+    console.error('Google login failed: ', error.message)
+  }
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  if (session) {
+    console.log('User logged in through Google', session.user)
+    router.push('/dashboard')
+  } else {
+    console.log('No active session found, login probably failed.')
+  }
   //TODO: write code for functionality (collaboration with supabase)
 }
 </script>
@@ -40,17 +77,20 @@ const loginWithGoogle = () => {
         <div class="flex flex-col gap-3">
           <div>
             <Label for="email">Email</Label>
-            <Input id="email" placeholder="name@example.com" />
+            <Input v-model="email" id="email" placeholder="name@example.com" />
           </div>
           <div>
             <Label for="password">Password</Label>
-            <Input id="password" type="password" placeholder="Password" />
+            <Input v-model="password" id="password" type="password" placeholder="Password" />
+          </div>
+          <div v-if="errorMessage" class="text-red-500 text-sm mt-2">
+            {{ errorMessage }}
           </div>
         </div>
       </CardContent>
       <CardFooter>
         <div class="flex flex-col w-full gap-3">
-          <Button>Login</Button>
+          <Button @click="signInUser">Login</Button>
           <Button @click="goToSignUp">Create an account</Button>
 
           <div class="relative flex items-center w-full">
