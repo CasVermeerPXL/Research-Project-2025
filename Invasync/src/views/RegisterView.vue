@@ -13,15 +13,16 @@ import { Label } from '@/components/ui/label'
 
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-
 import { createClient } from '@supabase/supabase-js'
+import type { Database } from '@/types/database.types'
 
-const supabaseUrl = 'https://dwtvxirvtrytdidjatxo.supabase.co'
-const anonKey =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3dHZ4aXJ2dHJ5dGRpZGphdHhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE3OTExMjAsImV4cCI6MjA1NzM2NzEyMH0.4ZBfJSwEQjdDGHpnlhjZMWLybnqUZyaZlsQC_s8J_bc'
-const supabase = createClient(supabaseUrl, anonKey)
+const supabase = createClient<Database>(
+  import.meta.env.VITE_SUPA_URL,
+  import.meta.env.VITE_SUPA_KEY,
+)
 
 const router = useRouter()
+const username = ref('')
 const email = ref('')
 const firstName = ref('')
 const lastName = ref('')
@@ -29,6 +30,7 @@ const password = ref('')
 const confirmPassword = ref('')
 
 const errors = ref({
+  username: '',
   firstName: '',
   lastName: '',
   email: '',
@@ -42,6 +44,7 @@ const passwordsMatch = computed(() => {
 
 const validateForm = () => {
   errors.value = {
+    username: '',
     firstName: '',
     lastName: '',
     email: '',
@@ -51,6 +54,10 @@ const validateForm = () => {
 
   let isValid = true
 
+  if (!username.value) {
+    errors.value.username = 'Username is required'
+    isValid = false
+  }
   if (!firstName.value) {
     errors.value.firstName = 'First name is required'
     isValid = false
@@ -88,11 +95,12 @@ const signUpUser = async () => {
     return
   }
 
-  const { data, error } = await supabase.auth.signUp({
+  let { data, error } = await supabase.auth.signUp({
     email: email.value,
     password: password.value,
     options: {
       data: {
+        username: username.value,
         first_name: firstName.value,
         last_name: lastName.value,
       },
@@ -101,7 +109,7 @@ const signUpUser = async () => {
 
   if (error) {
     console.log(error.message)
-  } else {
+  } else if (data.user) {
     console.log('User is registered')
     router.push('/login')
   }
@@ -120,10 +128,22 @@ const signUpUser = async () => {
       <CardContent>
         <div class="flex flex-col gap-3">
           <div>
+            <Label for="username">Username</Label>
+            <Input
+              v-model="username"
+              id="username"
+              type="text"
+              placeholder="Username"
+              :class="{ 'border-red-500': errors.username }"
+            />
+            <p v-if="errors.username" class="text-red-500 text-sm">{{ errors.username }}</p>
+          </div>
+          <div>
             <Label for="firstName">First name</Label>
             <Input
               v-model="firstName"
               id="firstName"
+              type="text"
               placeholder="First name"
               :class="{ 'border-red-500': errors.firstName }"
             />
@@ -133,6 +153,7 @@ const signUpUser = async () => {
             <Label for="lastName">Last name</Label>
             <Input
               v-model="lastName"
+              type="text"
               id="lastName"
               placeholder="Last name"
               :class="{ 'border-red-500': errors.lastName }"
