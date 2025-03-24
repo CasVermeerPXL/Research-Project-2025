@@ -87,8 +87,6 @@ const navItems = computed(() => {
       class="fixed top-4 left-4 z-50 bg-background border border-border rounded-lg shadow-md transition-all duration-300 ease-in-out overflow-hidden"
       :class="isMenuOpen ? 'w-48' : 'w-12'"
     >
-      :class="isMenuOpen ? 'w-48' : 'w-12'"
-    >
       <div class="flex flex-col">
         <button
           @click="toggleMenu"

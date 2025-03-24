@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
-    "@vueuse/core": "^13.0.0",
     "@unovis/ts": "^1.5.1",
     "@unovis/vue": "^1.5.1",
     "@vueuse/core": "^13.0.0",
