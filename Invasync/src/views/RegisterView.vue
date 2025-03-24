@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label'
 
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { createClient } from '@supabase/supabase-js'
+import { AuthApiError, createClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/database.types'
 
 const supabase = createClient<Database>(
@@ -101,17 +101,19 @@ const signUpUser = async () => {
     options: {
       data: {
         username: username.value,
-        first_name: firstName.value,
-        last_name: lastName.value,
+        given_name: firstName.value,
+        family_name: lastName.value,
       },
     },
   })
 
-  if (error) {
+  if (error instanceof AuthApiError) {
+    errors.value.email = error.message
+  } else if (error) {
     console.log(error.message)
   } else if (data.user) {
     console.log('User is registered')
-    router.push('/login')
+    router.push('/dashboard')
   }
 }
 </script>

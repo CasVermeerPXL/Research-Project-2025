@@ -48,22 +48,17 @@ const signInUser = async () => {
 const loginWithGoogle = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
+    options: {
+      scopes: 'email profile',
+      redirectTo: `${window.location.origin}/auth/callback`,
+    },
   })
 
   if (error) {
     console.error('Google login failed: ', error.message)
+  } else if (data.url) {
+    window.location.href = data.url
   }
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-  if (session) {
-    console.log('User logged in through Google', session.user)
-    router.push('/dashboard')
-  } else {
-    console.log('No active session found, login probably failed.')
-  }
-  //TODO: write code for functionality (collaboration with supabase)
 }
 </script>
 

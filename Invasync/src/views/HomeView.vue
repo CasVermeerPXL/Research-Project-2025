@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
+import { RouterLink } from 'vue-router'
 </script>
 
 <template>
@@ -25,7 +26,9 @@ import { Button } from '@/components/ui/button'
         and tools to tackle the invasive species effectively.
       </p>
     </div>
-    <Button class="text-2xl p-8 rounded-lg"> Get started </Button>
+    <RouterLink to="/dashboard">
+      <Button class="text-2xl p-8 rounded-lg"> Get started </Button>
+    </RouterLink>
     <div class="flex bg-secondary text-secondary-foreground px-16 py-10 rounded-3xl gap-16">
       <div class="flex flex-col gap-4">
         <h1 class="text-2xl">Global monitoring</h1>
