@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { cn } from '../utils'
-import { Combobox, ComboboxAnchor, ComboboxEmpty, ComboboxGroup, ComboboxInput, ComboboxItem, ComboboxItemIndicator, ComboboxList } from '@/components/ui/combobox'
+import {
+  Combobox,
+  ComboboxAnchor,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxItemIndicator,
+  ComboboxList,
+} from '@/components/ui/combobox'
 import { Check, Search } from 'lucide-vue-next'
 
 const frameworks = [
@@ -23,7 +32,11 @@ type Framework = { value: string; label: string }
   <Combobox by="label">
     <ComboboxAnchor>
       <div class="relative w-full max-w-sm items-center">
-        <ComboboxInput class="pl-9" :display-value="(val: Framework) => val?.label ?? ''" placeholder="Search..." />
+        <ComboboxInput
+          class="pl-9"
+          :display-value="(val: Framework) => val?.label ?? ''"
+          placeholder="Search..."
+        />
         <span class="absolute start-0 inset-y-0 flex items-center justify-center px-3">
           <Search class="size-4 text-muted-foreground" />
         </span>
@@ -31,16 +44,10 @@ type Framework = { value: string; label: string }
     </ComboboxAnchor>
 
     <ComboboxList>
-      <ComboboxEmpty>
-        No data found.
-      </ComboboxEmpty>
+      <ComboboxEmpty> No data found. </ComboboxEmpty>
 
       <ComboboxGroup>
-        <ComboboxItem
-          v-for="framework in frameworks"
-          :key="framework.value"
-          :value="framework"
-        >
+        <ComboboxItem v-for="framework in frameworks" :key="framework.value" :value="framework">
           {{ framework.label }}
 
           <ComboboxItemIndicator>

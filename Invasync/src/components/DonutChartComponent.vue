@@ -35,17 +35,10 @@ const data = [
 ]
 
 function valueFormatter(tick: number | Date) {
-  return typeof tick === 'number'
-    ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
-    : ''
+  return typeof tick === 'number' ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}` : ''
 }
 </script>
 
 <template>
-  <DonutChart
-    index="name"
-    :category="'total'"
-    :data="data"
-    :value-formatter="valueFormatter"
-  />
+  <DonutChart index="name" :category="'total'" :data="data" :value-formatter="valueFormatter" />
 </template>
