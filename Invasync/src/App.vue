@@ -94,10 +94,6 @@ const navItems = computed(() => {
           @click="toggleMenu"
           class="p-3 w-full flex items-center justify-between hover:bg-muted/50 transition-colors"
         >
-        <button
-          @click="toggleMenu"
-          class="p-3 w-full flex items-center justify-between hover:bg-muted/50 transition-colors"
-        >
           <div class="flex items-center">
             <MenuIcon v-if="!isMenuOpen" class="h-5 w-5" />
             <XIcon v-else class="h-5 w-5" />
