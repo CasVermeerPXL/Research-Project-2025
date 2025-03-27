@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { RouterView, useRouter } from 'vue-router'
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/database.types'
@@ -26,6 +26,7 @@ const router = useRouter()
 const user = ref<any>(null)
 
 onMounted(async () => {
+  //Initial check
   const {
     data: { user: authUser },
     error,
@@ -33,6 +34,19 @@ onMounted(async () => {
   if (!error && authUser) {
     user.value = authUser
   }
+  // Check for changes
+  const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN') {
+      user.value = session?.user ?? null
+    } else if (event === 'SIGNED_OUT') {
+      user.value = null
+    }
+  })
+
+  // Cleanup listener on unmount
+  onUnmounted(() => {
+    authListener.subscription.unsubscribe()
+  })
 })
 
 // Toggle menu function
