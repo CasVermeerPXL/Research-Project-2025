@@ -39,7 +39,7 @@ import DonutChartComponent from '@/components/DonutChartComponent.vue'
               <CardDescription></CardDescription>
             </CardHeader>
             <CardContent class="text-lg">
-              <p>55%</p>
+              <p class="text-yellow-300">55%</p>
             </CardContent>
             <CardFooter class="text-sm">
               <p>Water hyacinth coverage</p>
@@ -64,7 +64,7 @@ import DonutChartComponent from '@/components/DonutChartComponent.vue'
               <CardDescription></CardDescription>
             </CardHeader>
             <CardContent class="text-lg">
-              <p>-22%</p>
+              <p class="text-green-500">-22%</p>
             </CardContent>
             <CardFooter class="text-sm">
               <p>Growth rate</p>

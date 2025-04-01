@@ -184,7 +184,7 @@ const signUpUser = async () => {
             <p v-if="errors.password" class="text-red-500 text-sm">{{ errors.password }}</p>
           </div>
           <div>
-            <Label for="confirmPassword">Password</Label>
+            <Label for="confirmPassword">Confirm password</Label>
             <Input
               v-model="confirmPassword"
               id="confirmPassword"

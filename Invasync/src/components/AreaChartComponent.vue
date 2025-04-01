@@ -41,5 +41,5 @@ const data = [
 </script>
 
 <template>
-  <AreaChart :data="data" index="name" :categories="['total', 'predicted']" />
+  <AreaChart :data="data" index="name" :categories="['total', 'predicted']" :colors="['#3DA35D', '#5FCB89']"/>
 </template>

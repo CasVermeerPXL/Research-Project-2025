@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { DonutChart } from '@/components/ui/chart-donut'
+import { ref, onMounted } from 'vue'
+import { createClient } from '@supabase/supabase-js'
+import type { Database } from '@/types/database.types'
 
 const data = [
   {
@@ -37,8 +40,52 @@ const data = [
 function valueFormatter(tick: number | Date) {
   return typeof tick === 'number' ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}` : ''
 }
+
+// const supabase = createClient<Database>(
+//   import.meta.env.VITE_SUPA_URL,
+//   import.meta.env.VITE_SUPA_KEY,
+// )
+
+// type WeatherRow = {
+//   created_at: string;
+//   temperature: number | null;
+// }
+
+
+
+// const weatherData = ref<{ name: string; total: number }[]>([])
+
+// const fetchWeatherData = async () => {
+//   const { data: result, error } = await supabase
+//     .from('weather')
+//     .select('created_at, temperature')
+
+//   if (error) {
+//     console.error(error)
+//   } else {
+//     const groupedData: Record<string, { name: string; total: number; count: number }> = {}
+//     result.forEach((row: WeatherRow) => {
+//       if (row.temperature !== null) {
+//       const month = new Date(row.created_at).toLocaleString('default', { month: 'short' })
+//       if (!groupedData[month]) groupedData[month] = { name: month, total: 0, count: 0 }
+//       groupedData[month].total += row.temperature
+//       groupedData[month].count++
+//       }
+//     })
+
+
+//     weatherData.value = Object.values(groupedData).map((d) => ({
+//       name: d.name,
+//       total: d.total / d.count,
+//     }))
+//   }
+// }
+
+// onMounted(() => {
+//   fetchWeatherData()
+// })
 </script>
 
 <template>
-  <DonutChart index="name" :category="'total'" :data="data" :value-formatter="valueFormatter" />
+  <DonutChart index="name" :category="'total'" :data="data" :value-formatter="valueFormatter" :colors="['#34D399', '#10B981', '#6EE7B7', '#A7F3D0', '#D1FAE5']"/>
 </template>

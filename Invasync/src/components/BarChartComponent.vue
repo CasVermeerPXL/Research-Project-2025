@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { BarChart } from '@/components/ui/chart-bar'
 
+
 const data = [
   {
     name: 'Jan',
@@ -45,12 +46,14 @@ const data = [
     :data="data"
     index="name"
     :categories="['total', 'predicted']"
+    :colors="['#2E8540', '#4FB374']"
     :y-formatter="
       (tick: number, i: number) => {
         return typeof tick === 'number'
           ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
           : ''
       }
+
     "
   />
 </template>
