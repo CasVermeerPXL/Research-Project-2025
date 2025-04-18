@@ -4,43 +4,6 @@ import { ref, onMounted } from 'vue'
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/database.types'
 
-// const data = [
-//   {
-//     name: 'Jan',
-//     total: Math.floor(Math.random() * 2000) + 500,
-//     predicted: Math.floor(Math.random() * 2000) + 500,
-//   },
-//   {
-//     name: 'Feb',
-//     total: Math.floor(Math.random() * 2000) + 500,
-//     predicted: Math.floor(Math.random() * 2000) + 500,
-//   },
-//   {
-//     name: 'Mar',
-//     total: Math.floor(Math.random() * 2000) + 500,
-//     predicted: Math.floor(Math.random() * 2000) + 500,
-//   },
-//   {
-//     name: 'Apr',
-//     total: Math.floor(Math.random() * 2000) + 500,
-//     predicted: Math.floor(Math.random() * 2000) + 500,
-//   },
-//   {
-//     name: 'May',
-//     total: Math.floor(Math.random() * 2000) + 500,
-//     predicted: Math.floor(Math.random() * 2000) + 500,
-//   },
-//   {
-//     name: 'Jun',
-//     total: Math.floor(Math.random() * 2000) + 500,
-//     predicted: Math.floor(Math.random() * 2000) + 500,
-//   },
-//   {
-//     name: 'Jul',
-//     total: Math.floor(Math.random() * 2000) + 500,
-//     predicted: Math.floor(Math.random() * 2000) + 500,
-//   },
-// ]
 
 const supabase = createClient<Database>(
   import.meta.env.VITE_SUPA_URL,
@@ -59,11 +22,13 @@ const weatherData = ref<{ name: string; total: number }[]>([])
 const fetchWeatherData = async () => {
   const { data: result, error } = await supabase
     .from('weather')
-    .select('created_at, temperature')
+    .select('*')
 
   if (error) {
     console.error(error)
   } else {
+    console.log(import.meta.env.VITE_SUPA_URL)
+    console.log(result)
     const groupedData: Record<string, { name: string; total: number; count: number }> = {}
     result.forEach((row: WeatherRow) => {
       if (row.temperature !== null) {
@@ -90,5 +55,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <AreaChart :data="weatherData" index="name" :categories="['name', 'total']" :colors="['#3DA35D', '#5FCB89']"/>
+  <AreaChart :data="weatherData" index="name" :categories="['total']" :colors="['#3DA35D', '#5FCB89']"/>
 </template>

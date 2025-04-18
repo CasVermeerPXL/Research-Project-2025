@@ -79,6 +79,7 @@ function valueFormatter(tick: number | Date) {
 //       total: d.total / d.count,
 //     }))
 //   }
+//   console.log(weatherData)
 // }
 
 // onMounted(() => {
