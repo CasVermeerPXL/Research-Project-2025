@@ -11,6 +11,7 @@ import {
 import AreaChartComponent from '@/components/AreaChartComponent.vue'
 import BarChartComponent from '@/components/BarChartComponent.vue'
 import DonutChartComponent from '@/components/DonutChartComponent.vue'
+import LineChartComponent from '@/components/LineChartComponent.vue'
 </script>
 
 <template>
@@ -160,7 +161,7 @@ import DonutChartComponent from '@/components/DonutChartComponent.vue'
         </div>
         <div class="flex flex-row w-full">
           <div class="flex justify-center items-center w-1/2">
-            <AreaChartComponent></AreaChartComponent>
+            <LineChartComponent></LineChartComponent>
           </div>
           <div class="flex justify-center items-center w-1/2">
             <DonutChartComponent></DonutChartComponent>

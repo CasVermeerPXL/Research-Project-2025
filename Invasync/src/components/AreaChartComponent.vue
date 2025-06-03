@@ -10,50 +10,97 @@ const supabase = createClient<Database>(
   import.meta.env.VITE_SUPA_KEY,
 )
 
-type WeatherRow = {
+// type WeatherRow = {
+//   created_at: string;
+//   temperature: number | null;
+// }
+
+
+
+// const weatherData = ref<{ name: string; total: number }[]>([])
+
+// const fetchWeatherData = async () => {
+//   const { data: result, error } = await supabase
+//     .from('weather')
+//     .select('*')
+
+//   if (error) {
+//     console.error(error)
+//   } else {
+//     console.log(import.meta.env.VITE_SUPA_URL)
+//     console.log(result)
+//     const groupedData: Record<string, { name: string; total: number; count: number }> = {}
+//     result.forEach((row: WeatherRow) => {
+//       if (row.temperature !== null) {
+//       const month = new Date(row.created_at).toLocaleString('default', { month: 'short' })
+//       if (!groupedData[month]) groupedData[month] = { name: month, total: 0, count: 0 }
+//       groupedData[month].total += row.temperature
+//       groupedData[month].count++
+//       }
+//     })
+
+
+//     weatherData.value = Object.values(groupedData).map((d) => ({
+//       name: d.name,
+//       total: d.total / d.count,
+//     }))
+//   }
+//   console.log('Weather Data:', weatherData.value)
+
+// }
+
+// onMounted(() => {
+//   fetchWeatherData()
+// })
+
+type HyacinthRow = {
   created_at: string;
-  temperature: number | null;
+  hyacinth_area: number | null;
 }
 
+const hyacinthData = ref<{ name: string; total: number }[]>([])
 
-
-const weatherData = ref<{ name: string; total: number }[]>([])
-
-const fetchWeatherData = async () => {
+const fetchHyacinthData = async () => {
   const { data: result, error } = await supabase
-    .from('weather')
+    .from('hyacinth')
     .select('*')
 
   if (error) {
-    console.error(error)
-  } else {
-    console.log(import.meta.env.VITE_SUPA_URL)
-    console.log(result)
-    const groupedData: Record<string, { name: string; total: number; count: number }> = {}
-    result.forEach((row: WeatherRow) => {
-      if (row.temperature !== null) {
-      const month = new Date(row.created_at).toLocaleString('default', { month: 'short' })
-      if (!groupedData[month]) groupedData[month] = { name: month, total: 0, count: 0 }
-      groupedData[month].total += row.temperature
-      groupedData[month].count++
-      }
-    })
-
-
-    weatherData.value = Object.values(groupedData).map((d) => ({
-      name: d.name,
-      total: d.total / d.count,
-    }))
+    console.error('Error fetching hyacinth data:', error)
+    return
   }
-  console.log('Weather Data:', weatherData.value)
 
+  const groupedData: Record<string, { name: string; total: number; count: number }> = {}
+
+  result.forEach((row: HyacinthRow) => {
+    if (row.hyacinth_area !== null) {
+      const month = new Date(row.created_at).toLocaleString('en-US', { month: 'short' })
+      if (!groupedData[month]) {
+        groupedData[month] = { name: month, total: 0, count: 0 }
+      }
+      groupedData[month].total += row.hyacinth_area
+      groupedData[month].count++
+    }
+  })
+
+  const monthOrder = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+hyacinthData.value = Object.values(groupedData)
+  .map(d => ({
+    name: d.name,
+    total: d.total / d.count,
+  }))
+  .sort((a, b) => monthOrder.indexOf(a.name) - monthOrder.indexOf(b.name))
+
+
+  console.log('Hyacinth Data:', hyacinthData.value)
 }
 
 onMounted(() => {
-  fetchWeatherData()
+  fetchHyacinthData()
 })
 </script>
 
 <template>
-  <AreaChart :data="weatherData" index="name" :categories="['total']" :colors="['#3DA35D', '#5FCB89']"/>
+  <AreaChart :data="hyacinthData" index="name" :categories="['total']" :colors="['#3DA35D', '#5FCB89']"/>
 </template>

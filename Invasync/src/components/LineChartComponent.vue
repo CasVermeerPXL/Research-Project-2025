@@ -1,281 +1,151 @@
 <script setup lang="ts">
 import { LineChart } from '@/components/ui/chart-line'
+import { ref, onMounted } from 'vue'
+import { createClient } from '@supabase/supabase-js'
+import type { Database } from '@/types/database.types'
 
-const data = [
-  {
-    year: 1970,
-    'Export Growth Rate': 2.04,
-    'Import Growth Rate': 1.53,
-  },
-  {
-    year: 1971,
-    'Export Growth Rate': 1.96,
-    'Import Growth Rate': 1.58,
-  },
-  {
-    year: 1972,
-    'Export Growth Rate': 1.96,
-    'Import Growth Rate': 1.61,
-  },
-  {
-    year: 1973,
-    'Export Growth Rate': 1.93,
-    'Import Growth Rate': 1.61,
-  },
-  {
-    year: 1974,
-    'Export Growth Rate': 1.88,
-    'Import Growth Rate': 1.67,
-  },
-  {
-    year: 1975,
-    'Export Growth Rate': 1.79,
-    'Import Growth Rate': 1.64,
-  },
-  {
-    year: 1976,
-    'Export Growth Rate': 1.77,
-    'Import Growth Rate': 1.62,
-  },
-  {
-    year: 1977,
-    'Export Growth Rate': 1.74,
-    'Import Growth Rate': 1.69,
-  },
-  {
-    year: 1978,
-    'Export Growth Rate': 1.74,
-    'Import Growth Rate': 1.7,
-  },
-  {
-    year: 1979,
-    'Export Growth Rate': 1.77,
-    'Import Growth Rate': 1.67,
-  },
-  {
-    year: 1980,
-    'Export Growth Rate': 1.79,
-    'Import Growth Rate': 1.7,
-  },
-  {
-    year: 1981,
-    'Export Growth Rate': 1.81,
-    'Import Growth Rate': 1.72,
-  },
-  {
-    year: 1982,
-    'Export Growth Rate': 1.84,
-    'Import Growth Rate': 1.73,
-  },
-  {
-    year: 1983,
-    'Export Growth Rate': 1.77,
-    'Import Growth Rate': 1.73,
-  },
-  {
-    year: 1984,
-    'Export Growth Rate': 1.78,
-    'Import Growth Rate': 1.78,
-  },
-  {
-    year: 1985,
-    'Export Growth Rate': 1.78,
-    'Import Growth Rate': 1.81,
-  },
-  {
-    year: 1986,
-    'Export Growth Rate': 1.82,
-    'Import Growth Rate': 1.89,
-  },
-  {
-    year: 1987,
-    'Export Growth Rate': 1.82,
-    'Import Growth Rate': 1.91,
-  },
-  {
-    year: 1988,
-    'Export Growth Rate': 1.77,
-    'Import Growth Rate': 1.94,
-  },
-  {
-    year: 1989,
-    'Export Growth Rate': 1.76,
-    'Import Growth Rate': 1.94,
-  },
-  {
-    year: 1990,
-    'Export Growth Rate': 1.75,
-    'Import Growth Rate': 1.97,
-  },
-  {
-    year: 1991,
-    'Export Growth Rate': 1.62,
-    'Import Growth Rate': 1.99,
-  },
-  {
-    year: 1992,
-    'Export Growth Rate': 1.56,
-    'Import Growth Rate': 2.12,
-  },
-  {
-    year: 1993,
-    'Export Growth Rate': 1.5,
-    'Import Growth Rate': 2.13,
-  },
-  {
-    year: 1994,
-    'Export Growth Rate': 1.46,
-    'Import Growth Rate': 2.15,
-  },
-  {
-    year: 1995,
-    'Export Growth Rate': 1.43,
-    'Import Growth Rate': 2.17,
-  },
-  {
-    year: 1996,
-    'Export Growth Rate': 1.4,
-    'Import Growth Rate': 2.2,
-  },
-  {
-    year: 1997,
-    'Export Growth Rate': 1.37,
-    'Import Growth Rate': 2.15,
-  },
-  {
-    year: 1998,
-    'Export Growth Rate': 1.34,
-    'Import Growth Rate': 2.07,
-  },
-  {
-    year: 1999,
-    'Export Growth Rate': 1.32,
-    'Import Growth Rate': 2.05,
-  },
-  {
-    year: 2000,
-    'Export Growth Rate': 1.33,
-    'Import Growth Rate': 2.07,
-  },
-  {
-    year: 2001,
-    'Export Growth Rate': 1.31,
-    'Import Growth Rate': 2.08,
-  },
-  {
-    year: 2002,
-    'Export Growth Rate': 1.29,
-    'Import Growth Rate': 2.1,
-  },
-  {
-    year: 2003,
-    'Export Growth Rate': 1.27,
-    'Import Growth Rate': 2.15,
-  },
-  {
-    year: 2004,
-    'Export Growth Rate': 1.27,
-    'Import Growth Rate': 2.21,
-  },
-  {
-    year: 2005,
-    'Export Growth Rate': 1.26,
-    'Import Growth Rate': 2.23,
-  },
-  {
-    year: 2006,
-    'Export Growth Rate': 1.26,
-    'Import Growth Rate': 2.29,
-  },
-  {
-    year: 2007,
-    'Export Growth Rate': 1.27,
-    'Import Growth Rate': 2.34,
-  },
-  {
-    year: 2008,
-    'Export Growth Rate': 1.26,
-    'Import Growth Rate': 2.36,
-  },
-  {
-    year: 2009,
-    'Export Growth Rate': 1.26,
-    'Import Growth Rate': 2.36,
-  },
-  {
-    year: 2010,
-    'Export Growth Rate': 1.25,
-    'Import Growth Rate': 2.35,
-  },
-  {
-    year: 2011,
-    'Export Growth Rate': 1.24,
-    'Import Growth Rate': 2.34,
-  },
-  {
-    year: 2012,
-    'Export Growth Rate': 1.25,
-    'Import Growth Rate': 2.39,
-  },
-  {
-    year: 2013,
-    'Export Growth Rate': 1.22,
-    'Import Growth Rate': 2.3,
-  },
-  {
-    year: 2014,
-    'Export Growth Rate': 1.2,
-    'Import Growth Rate': 2.35,
-  },
-  {
-    year: 2015,
-    'Export Growth Rate': 1.17,
-    'Import Growth Rate': 2.39,
-  },
-  {
-    year: 2016,
-    'Export Growth Rate': 1.16,
-    'Import Growth Rate': 2.41,
-  },
-  {
-    year: 2017,
-    'Export Growth Rate': 1.13,
-    'Import Growth Rate': 2.44,
-  },
-  {
-    year: 2018,
-    'Export Growth Rate': 1.07,
-    'Import Growth Rate': 2.45,
-  },
-  {
-    year: 2019,
-    'Export Growth Rate': 1.03,
-    'Import Growth Rate': 2.47,
-  },
-  {
-    year: 2020,
-    'Export Growth Rate': 0.92,
-    'Import Growth Rate': 2.48,
-  },
-  {
-    year: 2021,
-    'Export Growth Rate': 0.82,
-    'Import Growth Rate': 2.51,
-  },
-]
+const supabase = createClient<Database>(
+  import.meta.env.VITE_SUPA_URL,
+  import.meta.env.VITE_SUPA_KEY
+)
+
+const weatherData = ref<{ name: string; Temperature: number; Humidity: number; Rainfall: number; WaterTemperature: number; Date: string }[]>([])
+
+const fetchWeatherData = async () => {
+  const { data: weather, error: weatherError } = await supabase
+    .from('weather')
+    .select('created_at, temperature, humidity, rainfall, water_temperature')
+    .order('created_at', { ascending: true })
+    .limit(20)
+
+  if (weatherError) {
+    console.error('Error fetching weather data:', weatherError)
+    return
+  }
+
+  weatherData.value = weather.map((entry, index) => ({
+  name: `Data Point ${index + 1}`,
+  Temperature: entry.temperature ?? null,
+  Humidity: entry.humidity ?? null,
+  Rainfall: entry.rainfall ?? null,
+  WaterTemperature: entry.water_temperature ?? null,
+  Date: new Date(entry.created_at).toISOString().split('T')[0],
+}))
+
+}
+
+onMounted(() => {
+  fetchWeatherData()
+})
 </script>
 
 <template>
   <LineChart
-    :data="data"
-    index="year"
-    :categories="['Export Growth Rate', 'Import Growth Rate']"
-    :y-formatter="
-      (tick: number, i: number) => {
-        return typeof tick === 'number'
-          ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}`
-          : ''
-      }
-    "
+    :data="weatherData"
+    index="Date"
+    :categories="['Temperature', 'Humidity', 'Rainfall', 'WaterTemperature']"
+    :colors="['#FF5733', '#33C4FF', '#33FF6F', '#9C33FF']"
+    :x-axis="{
+      labelRotation: 45,
+      labelFormatter: (value: any) => new Date(value).toLocaleDateString(),
+    }"
   />
 </template>
+
+<!-- <script setup lang="ts">
+import { LineChart } from '@/components/ui/chart-line'
+import { ref, onMounted } from 'vue'
+import { createClient } from '@supabase/supabase-js'
+import type { Database } from '@/types/database.types'
+
+const supabase = createClient<Database>(
+  import.meta.env.VITE_SUPA_URL,
+  import.meta.env.VITE_SUPA_KEY,
+)
+
+const deploymentEffectivenessData = ref<{ name: string; Before: number; After: number }[]>([])
+
+const fetchDeploymentEffectiveness = async () => {
+  const { data: flights, error: flightsError } = await supabase
+    .from('drone_flights')
+    .select('flight_id')
+
+  if (flightsError) {
+    console.error('Error fetching flights data:', flightsError)
+    return
+  }
+
+  const flightIds = flights.map(f => f.flight_id)
+
+  const { data: deployments, error: deploymentsError } = await supabase
+    .from('hopper_deployments')
+    .select('deployment_id, flight_id, deployment_time')
+    .in('flight_id', flightIds)
+
+  if (deploymentsError) {
+    console.error('Error fetching deployments data:', deploymentsError)
+    return
+  }
+
+  const { data: hyacinthData, error: hyacinthError } = await supabase
+    .from('hyacinth')
+    .select('flight_id, hyacinth_area, created_at')
+    .in('flight_id', flightIds)
+
+  if (hyacinthError) {
+    console.error('Error fetching hyacinth data:', hyacinthError)
+    return
+  }
+
+  const groupedByFlight: Record<string, { before: number | null; after: number | null; deploymentTime: string }> = {}
+
+  for (const flight of flights) {
+    const flightId = flight.flight_id
+    const deployment = deployments.find(d => d.flight_id === flightId)
+    if (!deployment) continue
+
+    const deploymentTime = new Date(deployment.deployment_time).getTime()
+
+    const hyacinthForFlight = hyacinthData.filter(h => h.flight_id === flightId)
+
+    const hyacinthBefore = hyacinthForFlight
+      .filter(h => new Date(h.created_at).getTime() < deploymentTime)
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0]
+
+    const hyacinthAfter = hyacinthForFlight
+      .filter(h => new Date(h.created_at).getTime() >= deploymentTime)
+      .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())[0]
+
+    console.log(`Flight ${flightId} → Deployment: ${deployment.deployment_time}`)
+    console.log(`  Before: ${hyacinthBefore?.created_at} | Area: ${hyacinthBefore?.hyacinth_area}`)
+    console.log(`  After: ${hyacinthAfter?.created_at} | Area: ${hyacinthAfter?.hyacinth_area}`)
+
+    groupedByFlight[flightId] = {
+      before: hyacinthBefore?.hyacinth_area ?? null,
+      after: hyacinthAfter?.hyacinth_area ?? null,
+      deploymentTime: deployment.deployment_time,
+    }
+  }
+
+
+  deploymentEffectivenessData.value = Object.entries(groupedByFlight)
+    .slice(0, 10)
+    .map(([flightId, d], index) => ({
+      name: `Flight ${index + 1}`,
+      Before: d.before ?? 0,
+      After: d.after ?? 0,
+    }))
+}
+onMounted(() => {
+  fetchDeploymentEffectiveness()
+})
+</script>
+
+<template>
+  <LineChart
+    :data="deploymentEffectivenessData"
+    index="name"
+    :categories="['Before', 'After']"
+    :colors="['#EF4444', '#3B82F6']"
+  />
+</template> -->

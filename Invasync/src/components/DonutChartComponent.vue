@@ -4,89 +4,55 @@ import { ref, onMounted } from 'vue'
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/database.types'
 
-const data = [
-  {
-    name: 'Jan',
-    total: Math.floor(Math.random() * 2000) + 500,
-    predicted: Math.floor(Math.random() * 2000) + 500,
-  },
-  {
-    name: 'Feb',
-    total: Math.floor(Math.random() * 2000) + 500,
-    predicted: Math.floor(Math.random() * 2000) + 500,
-  },
-  {
-    name: 'Mar',
-    total: Math.floor(Math.random() * 2000) + 500,
-    predicted: Math.floor(Math.random() * 2000) + 500,
-  },
-  {
-    name: 'Apr',
-    total: Math.floor(Math.random() * 2000) + 500,
-    predicted: Math.floor(Math.random() * 2000) + 500,
-  },
-  {
-    name: 'May',
-    total: Math.floor(Math.random() * 2000) + 500,
-    predicted: Math.floor(Math.random() * 2000) + 500,
-  },
-  {
-    name: 'Jun',
-    total: Math.floor(Math.random() * 2000) + 500,
-    predicted: Math.floor(Math.random() * 2000) + 500,
-  },
-]
+const supabase = createClient<Database>(
+  import.meta.env.VITE_SUPA_URL,
+  import.meta.env.VITE_SUPA_KEY
+)
 
-function valueFormatter(tick: number | Date) {
-  return typeof tick === 'number' ? `$ ${new Intl.NumberFormat('us').format(tick).toString()}` : ''
+const chartData = ref<{ name: string; total: number }[]>([])
+const TOTAL_AREA = 1000
+
+const fetchCoverageData = async () => {
+  const { data, error } = await supabase
+    .from('hyacinth')
+    .select('hyacinth_area')
+    .order('created_at', { ascending: false })
+    .limit(1)
+
+  if (error) {
+    console.error('Error fetching hyacinth data:', error)
+    return
+  }
+
+  const latest = data?.[0]
+
+  if (latest && latest.hyacinth_area !== null) {
+    const waterCoverage = TOTAL_AREA - latest.hyacinth_area
+
+    chartData.value = [
+      { name: 'Hyacinth', total: latest.hyacinth_area },
+      { name: 'Water', total: waterCoverage },
+    ]
+  }
 }
 
-// const supabase = createClient<Database>(
-//   import.meta.env.VITE_SUPA_URL,
-//   import.meta.env.VITE_SUPA_KEY,
-// )
+function valueFormatter(tick: number) {
+  return typeof tick === 'number'
+    ? `${tick.toLocaleString()} m²`
+    : ''
+}
 
-// type WeatherRow = {
-//   created_at: string;
-//   temperature: number | null;
-// }
-
-
-
-// const weatherData = ref<{ name: string; total: number }[]>([])
-
-// const fetchWeatherData = async () => {
-//   const { data: result, error } = await supabase
-//     .from('weather')
-//     .select('created_at, temperature')
-
-//   if (error) {
-//     console.error(error)
-//   } else {
-//     const groupedData: Record<string, { name: string; total: number; count: number }> = {}
-//     result.forEach((row: WeatherRow) => {
-//       if (row.temperature !== null) {
-//       const month = new Date(row.created_at).toLocaleString('default', { month: 'short' })
-//       if (!groupedData[month]) groupedData[month] = { name: month, total: 0, count: 0 }
-//       groupedData[month].total += row.temperature
-//       groupedData[month].count++
-//       }
-//     })
-
-
-//     weatherData.value = Object.values(groupedData).map((d) => ({
-//       name: d.name,
-//       total: d.total / d.count,
-//     }))
-//   }
-//   console.log(weatherData)
-// }
-
-// onMounted(() => {
-//   fetchWeatherData()
-// })
+onMounted(() => {
+  fetchCoverageData()
+})
 </script>
 
 <template>
-  <DonutChart index="name" :category="'total'" :data="data" :value-formatter="valueFormatter" :colors="['#34D399', '#10B981', '#6EE7B7', '#A7F3D0', '#D1FAE5']"/>
+  <DonutChart
+  index="name"
+  :category="'total'"
+  :data="chartData"
+  :value-formatter="valueFormatter"
+  :colors="['#10B981', '#3B82F6']"
+/>
 </template>

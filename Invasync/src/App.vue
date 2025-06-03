@@ -80,8 +80,8 @@ type NavItem = {
 const baseNavItems: NavItem[] = [
   { icon: HomeIcon, label: 'Home', path: '/' },
   { icon: LayoutDashboardIcon, label: 'Dashboard', path: '/dashboard' },
-  { icon: SettingsIcon, label: 'Settings', path: '/settings' },
-  { icon: HelpCircleIcon, label: 'Help', path: '/help' },
+  // { icon: SettingsIcon, label: 'Settings', path: '/settings' },
+  // { icon: HelpCircleIcon, label: 'Help', path: '/help' },
 ]
 
 const navItems = computed(() => {
