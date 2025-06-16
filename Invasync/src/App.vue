@@ -7,8 +7,6 @@ import type { Database } from '@/types/database.types'
 import {
   HomeIcon,
   LayoutDashboardIcon,
-  SettingsIcon,
-  HelpCircleIcon,
   MenuIcon,
   XIcon,
   LogInIcon,
