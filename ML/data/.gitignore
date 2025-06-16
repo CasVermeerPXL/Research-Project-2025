@@ -1,0 +1,4 @@
+drone_images/*.JPG
+drone_images_downscaled/*.JPG
+/masks/*
+*.zip
